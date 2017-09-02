@@ -175,6 +175,9 @@ class BaseImporter(object):
         User default django field validators to clean content
         and run custom validates
         """
+        pre_clean_function = getattr(self, 'pre_clean_%s' % field_name, False)
+        if pre_clean_function:
+            value = pre_clean_function(value, values=values)
         if self.Meta.model:
             # default django validate field
             try:
